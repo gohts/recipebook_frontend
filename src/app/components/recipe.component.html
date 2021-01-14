@@ -1,0 +1,116 @@
+<app-navbar></app-navbar>
+<div class="container">
+<div *ngFor="let i of recipes" >
+    <div class="card mb-3 p-2">
+      <div class="row no-gutters">
+        <div class="col-md-4 pt-3 pl-2">
+          <img src="{{i.image}}" class="card-img mb-3" alt="...">
+          <span *ngIf="i.veryHealthy">
+            <span class="badge rounded-pill bg-success p-2">
+              <i class="fas fa-hand-holding-heart"></i>
+            </span>
+            <small class="mx-2">Healthy</small>
+          </span>
+          <span *ngIf="i.veryPopular">
+            <span class="badge rounded-pill bg-danger p-2">
+              <i class="fas fa-fire"></i>
+            </span>
+            <small class="mx-2">Popular</small>
+          </span>
+          <span>
+            <span class="badge rounded-pill bg-info text-dark p-2">
+              <i class="far fa-clock"></i>
+            </span>
+            <small class="mx-2">Ready in {{i.readyInMinutes}}mins</small>
+          </span>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <h4 class="card-title">{{i.title}}</h4>
+              </div>
+              <div class="col-md-8 text-right">
+                <span class="mr-1">
+                  <button *ngIf="canPlan" type="button" class="btn btn-outline-primary btn-sm" (click)="planClicked(i.id)"><i class="far fa-calendar-plus mr-1"></i>Meal Planner</button>
+                </span>
+              </div>
+            </div>
+            <p class="card-text" [innerHTML]="i.summary"></p>
+            <div class="row">
+              <div class="col">
+                <img src={{i.useravatar}} width="30" height="30" class="rounded-circle mr-2" alt="" loading="lazy">
+                <span class="font-weight-lighter font-italic">Shared by {{i.username}}</span>
+                
+              </div>
+              <div class="col text-right">
+                <a class="badge rounded-pill bg-light text-dark mr-2 p-2 card-link" *ngIf="!i.showDetails" style="cursor: pointer;" (click)="toggleDetails(i.id)">Read more...</a>
+                <a class="badge rounded-pill bg-light text-dark mr-2 p-2 card-link" *ngIf="i.showDetails" style="cursor: pointer;" (click)="toggleDetails(i.id)">Less...</a>
+              
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+      <div *ngIf="i.showDetails" class="row mb-3 p-2">
+        <div class="col">
+          <h5 class="card-title">Ingredients</h5>
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Unit</th>
+                <!-- <th scope="col">Action</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let k of i.extendedIngredients; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{k.name}}</td>
+                <td>{{k.amount}}</td>
+                <td>{{k.unit}}</td>
+                <!-- <td>{{i}}</td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="i.showDetails" class="row mb-3 p-2">
+        <div class="col">
+          <h5 class="card-title">Instructions</h5>
+          <table>
+            <tr *ngFor="let j of i.analyzedInstructions[0].steps">
+              <td>{{j.number}}. {{j.step}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #modalContent let-close="close">
+    <div class="modal-header">
+      <h5 class="modal-title">Adding to Meal Planner: {{ modalData?.title }}</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="modalForm">
+    <div class="modal-body">
+        <div class="form-group form-inline">
+<label class="mx-3">Select a date to add to Meal Planner: </label>
+          
+          <input type="date" class="form-control" formControlName="plannedDate">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="planRecipe(modalData.id)" [disabled]="modalForm.invalid">
+        OK
+      </button>
+    </div>
+  </form>
+
+  </ng-template>
+</div>

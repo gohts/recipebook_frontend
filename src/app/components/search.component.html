@@ -1,0 +1,105 @@
+<app-navbar></app-navbar>
+<div class="container">
+<!-- <form [formGroup]="form" (ngSubmit)="searchRecipe()"> -->
+  <form [formGroup]="form" (ngSubmit)="queryRecipe()">
+
+    <div class="row mb-4">
+        <div class="col">
+            <input type="text" class="form-control" formControlName="query" placeholder="Search term">
+        </div>
+        <div class="col">
+            <select class="form-control" formControlName="cuisineType" >
+              <option [ngValue]="null" disabled>Cuisine...</option>
+                <option *ngFor="let i of cuisineType" value={{i}}>{{i}}</option>
+            </select>        
+        </div>
+        <div class="col">
+            <select class="form-control" formControlName="mealType">
+                <option [ngValue]="null" disabled>Meal type...</option>
+                <option *ngFor="let i of mealType" value={{i}}>{{i}}</option>
+            </select>        
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary mb-2" [disabled]="form.invalid">Search</button>
+        </div>
+    </div>
+</form>
+
+<div *ngFor="let i of searchResults" >
+  <div class="card mb-3 p-2">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{{i.image}}" class="card-img mb-3" alt="...">
+        <span *ngIf="i.veryHealthy">
+          <span class="badge rounded-pill bg-success p-2">
+            <i class="fas fa-hand-holding-heart"></i>
+          </span>
+          <small class="mx-2">Healthy</small>
+        </span>
+        <span *ngIf="i.veryPopular">
+          <span class="badge rounded-pill bg-danger p-2">
+            <i class="fas fa-fire"></i>
+          </span>
+          <small class="mx-2">Popular</small>
+        </span>
+        <span>
+          <span class="badge rounded-pill bg-info text-dark p-2">
+            <i class="far fa-clock"></i>
+          </span>
+          <small class="mx-2">Ready in {{i.readyInMinutes}}mins</small>
+        </span>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <h4 class="card-title">{{i.title}}</h4>
+            </div>
+            <div class="col-md-8 text-right">
+              <span class="mr-1">
+                <button type="button" class="btn btn-outline-primary btn-sm" (click)="saveRecipe(i.id)"><i class="fas fa-share-alt mr-1"></i>Share</button>
+              </span>
+            </div>
+          </div>
+          <p class="card-text" [innerHTML]="i.summary"></p>
+          <a class="badge rounded-pill bg-light text-dark mr-2 p-2 card-link" *ngIf="!i.showDetails" style="cursor: pointer;" (click)="toggleDetails(i.id)">Read more...</a>
+          <a class="badge rounded-pill bg-light text-dark mr-2 p-2 card-link" *ngIf="i.showDetails" style="cursor: pointer;" (click)="toggleDetails(i.id)">Less...</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="i.showDetails" class="row mb-3 p-2">
+      <div class="col">
+        <h5 class="card-title">Ingredients</h5>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let k of i.extendedIngredients; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{k.name}}</td>
+              <td>{{k.amount}}</td>
+              <td>{{k.unit}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="i.showDetails" class="row mb-3 p-2">
+      <div class="col">
+        <h5 class="card-title">Instructions</h5>
+        <table>
+          <tr *ngFor="let j of i.analyzedInstructions[0].steps">
+            <td>{{j.number}}. {{j.step}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

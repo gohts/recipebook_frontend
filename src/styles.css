@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+html {
+    min-height: 100%;
+    position: relative;
+  }
+  
+  .container-fluid {
+      padding-top: 70px;
+      padding-bottom: 70px;
+  }
+ 
