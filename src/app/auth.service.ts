@@ -16,7 +16,7 @@ export class AuthService implements CanActivate {
     fbLogin() {
 
         this.token = ''
-        window.open('http://localhost:3000/auth/facebook',"mywindow","location=1,status=1,scrollbars=1, width=800,height=800");
+        window.open('https://gohts-recipebook.herokuapp.com/auth/facebook',"mywindow","location=1,status=1,scrollbars=1, width=800,height=800");
         window.addEventListener('message', (message) => {
             this.token = message.data.token
             this.username = message.data.user.name

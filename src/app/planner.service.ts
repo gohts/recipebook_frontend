@@ -6,7 +6,6 @@ import { RecipeDetails } from "./models";
 @Injectable()
 export class PlannerService {
 
-    baseUrl = 'http://localhost:3000'
     constructor (private http: HttpClient, private authSvc: AuthService) {}
 
     saveRecipe (recipe: RecipeDetails) {
